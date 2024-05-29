@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  vproadb:    #is name of service
+    build:        # our Dockerfile is not in te current folder, but specify where is Dockerfile for db...context:.....
+      context: ./Docker-files/db
+    image: matkodevops/vprofiledb   #image name (name from DockerHub - own repository)
+    container_name: vprodb
+    ports:
+      -"3306:3306"
+    volumes:
+      -vprodbdata:/var/lib/mysql    #vprodbdata - is name of volume; /var/lib/mysql - is path...this folder will by mounted on this volume
+    environment:
+      - MYSQL_ROOT-PASSWORD=vprodbpass
+  
+  vprocache01:
+    image: memcached    #name of oficial image
+    ports:
+      -"11211:11211"
+    
+  vpromq01:
+    image: rabbitmq
+    ports:
+      -"15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=quest
+      - RABBITMQ_DEFAULT_PASS=quest
+  
+  vproaapp:    #is name of service
+    build:        
+      context: ./Docker-files/app
+    image: matkodevops/vprofileapp
+    container_name: vproapp
+    ports:
+      -"8080:8080"
+    volumes:
+      -vproappdata:/usr/local/tomcat/webapps 
+
+  vproaweb:    #is name of service
+    build:        
+      context: ./Docker-files/web
+    image: matkodevops/vprofileweb
+    container_name: vproweb
+    ports:
+      -"80:80"
+#for 2 mention volumes, must be created volume
+volumes:
+  vprodbdata: {}   #create volume  {} - means that create a volume in the Docker Engine itself
+  vproappdata: {}   #create volume
