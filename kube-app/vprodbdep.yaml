@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  nanme: vprodb
+  name: vprodb
   labels:
     app: vprodb
 spec:
