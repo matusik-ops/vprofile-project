@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vprodb
-          image: matkodevops/vprofiledb
+          image: vprofile/vprofiledb:V1
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: vpro-db-data
@@ -30,7 +30,7 @@ spec:
                   name: app-secret
                   key: db-pass
       nodeSelector:
-        zone: us-east-1a
+        topology.kubernetes.io/zone: us-east-1a
       volumes:
         - name: vpro-db-data
           awsElasticBlockStore:
